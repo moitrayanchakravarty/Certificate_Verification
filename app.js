@@ -10,12 +10,21 @@ const firebaseConfig = {
     storageBucket: "certificateverification-385c0.firebasestorage.app",
     messagingSenderId: "516100579750",
     appId: "1:516100579750:web:7eeae8c6f63e66cac56f67"
-
-};
+  };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+console.log("Firebase initialized:", app.name); // Should log "[DEFAULT]" if successful
 const db = getFirestore(app);
+
+async function testFirestoreConnection() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "Certificates"));
+        console.log("Firestore connected. Documents found:", querySnapshot.size);
+    } catch (error) {
+        console.error("Error connecting to Firestore:", error);
+    }
+}
 
 // Function to verify certificate
 document.getElementById("verification-form").addEventListener("submit", async (event) => {
@@ -31,7 +40,7 @@ document.getElementById("verification-form").addEventListener("submit", async (e
     }
 
     try {
-        const docRef = doc(db, "certificates", certId);
+        const docRef = doc(db, "Certificates", certId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
