@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification</title>
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Banner Section -->
+    <header>
+        <img src="banner.jpg" alt="Banner Image" class="banner">
+    </header>
+
+    <!-- Certificate Verification Section -->
+    <div class="verification-container">
+        <h2>Verify Your Certificate</h2>
+        <label for="certificate-id">Enter Certificate Number:</label>
+        <input type="text" id="certificate-id" placeholder="Enter Certificate ID" required>
+        <button id="verify-btn">Verify</button>
+        <div id="result"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js"></script>
+
+    <!-- Link to JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
