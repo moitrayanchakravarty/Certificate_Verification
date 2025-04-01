@@ -4,12 +4,13 @@ import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10
 
 // Firebase Configuration (Replace with your actual Firebase config)
 const firebaseConfig = {
-    apiKey: "YOUR_FIREBASE_API_KEY",
-    authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
-    projectId: "YOUR_FIREBASE_PROJECT_ID",
-    storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
-    appId: "YOUR_FIREBASE_APP_ID"
+    apiKey: "AIzaSyDLqOhvcJHuZS1iQVmAzHu0Ef_08jZLC84",
+    authDomain: "certificateverification-385c0.firebaseapp.com",
+    projectId: "certificateverification-385c0",
+    storageBucket: "certificateverification-385c0.firebasestorage.app",
+    messagingSenderId: "516100579750",
+    appId: "1:516100579750:web:7eeae8c6f63e66cac56f67"
+
 };
 
 // Initialize Firebase
@@ -20,7 +21,7 @@ const db = getFirestore(app);
 document.getElementById("verification-form").addEventListener("submit", async (event) => {
     event.preventDefault(); // Prevent form refresh
 
-    const certId = document.getElementById("certificate-id").value.trim();
+    const certId = document.getElementById("certificate_id").value.trim();
     const resultDiv = document.getElementById("result");
 
     if (certId === "") {
