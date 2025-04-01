@@ -1,48 +1,43 @@
-// Import Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
+require('dotenv').config(); // If using Node.js
 
-// Firebase Configuration (Replace with your actual Firebase config)
 const firebaseConfig = {
-    apiKey: "YOUR_FIREBASE_API_KEY",
-    authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
-    projectId: "YOUR_FIREBASE_PROJECT_ID",
-    storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
-    appId: "YOUR_FIREBASE_APP_ID"
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 // Function to verify certificate
-document.getElementById("verification-form").addEventListener("submit", async (event) => {
-    event.preventDefault(); // Prevent form refresh
-
+document.getElementById("verify-btn").addEventListener("click", () => {
     const certId = document.getElementById("certificate-id").value.trim();
     const resultDiv = document.getElementById("result");
 
     if (certId === "") {
         resultDiv.innerHTML = "❌ Please enter a Certificate ID.";
-        resultDiv.className = "invalid"; // Apply CSS class
+        resultDiv.style.color = "red";
         return;
     }
 
-    try {
-        const docRef = doc(db, "certificates", certId);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            resultDiv.innerHTML = `✅ Valid Certificate! <br> <strong>Name:</strong> ${docSnap.data().name}`;
-            resultDiv.className = "valid"; // Apply CSS class
-        } else {
-            resultDiv.innerHTML = "❌ Invalid Certificate!";
-            resultDiv.className = "invalid"; // Apply CSS class
-        }
-    } catch (error) {
-        console.error("Error verifying certificate:", error);
-        resultDiv.innerHTML = "⚠️ Error connecting to database.";
-        resultDiv.className = "error"; // Apply CSS class
-    }
+    // Search for the certificate in Firestore
+    db.collection("certificates").doc(certId).get()
+        .then((doc) => {
+            if (doc.exists) {
+                resultDiv.innerHTML = `✅ Valid Certificate! <br> Name: ${doc.data().name}`;
+                resultDiv.style.color = "green";
+            } else {
+                resultDiv.innerHTML = "❌ Invalid Certificate!";
+                resultDiv.style.color = "red";
+            }
+        })
+        .catch((error) => {
+            console.error("Error verifying certificate:", error);
+            resultDiv.innerHTML = "⚠️ Error connecting to database.";
+            resultDiv.style.color = "orange";
+        });
 });

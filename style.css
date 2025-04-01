@@ -32,27 +32,24 @@ h2 {
 
 /* Input Field */
 input {
-    width: 100%;
-    padding: 12px;
+    width: 90%;
+    padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-    box-sizing: border-box;
 }
 
 /* Verify Button */
 button {
-    width: 100%;
     background-color: #28a745;
     color: white;
-    padding: 12px 0;
+    padding: 10px 15px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    transition: background 0.3s;
-    margin-top: 10px;
+    transition: 0.3s;
 }
 
 button:hover {
@@ -64,14 +61,5 @@ button:hover {
     margin-top: 15px;
     font-size: 18px;
     font-weight: bold;
-}
-
-/* Valid Certificate */
-.valid {
-    color: #28a745;
-}
-
-/* Invalid Certificate */
-.invalid {
-    color: #dc3545;
+    color: #555;
 }
