@@ -1,43 +1,48 @@
-require('dotenv').config(); // If using Node.js
+// Import Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
 
+// Firebase Configuration (Replace with your actual Firebase config)
 const firebaseConfig = {
-    apiKey: process.env.REACT_APP_API_KEY,
-    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-    projectId: process.env.REACT_APP_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-    appId: process.env.REACT_APP_APP_ID
+    apiKey: "YOUR_FIREBASE_API_KEY",
+    authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
+    projectId: "YOUR_FIREBASE_PROJECT_ID",
+    storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
+    appId: "YOUR_FIREBASE_APP_ID"
 };
-
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // Function to verify certificate
-document.getElementById("verify-btn").addEventListener("click", () => {
+document.getElementById("verification-form").addEventListener("submit", async (event) => {
+    event.preventDefault(); // Prevent form refresh
+
     const certId = document.getElementById("certificate-id").value.trim();
     const resultDiv = document.getElementById("result");
 
     if (certId === "") {
         resultDiv.innerHTML = "❌ Please enter a Certificate ID.";
-        resultDiv.style.color = "red";
+        resultDiv.className = "invalid"; // Apply CSS class
         return;
     }
 
-    // Search for the certificate in Firestore
-    db.collection("certificates").doc(certId).get()
-        .then((doc) => {
-            if (doc.exists) {
-                resultDiv.innerHTML = `✅ Valid Certificate! <br> Name: ${doc.data().name}`;
-                resultDiv.style.color = "green";
-            } else {
-                resultDiv.innerHTML = "❌ Invalid Certificate!";
-                resultDiv.style.color = "red";
-            }
-        })
-        .catch((error) => {
-            console.error("Error verifying certificate:", error);
-            resultDiv.innerHTML = "⚠️ Error connecting to database.";
-            resultDiv.style.color = "orange";
-        });
+    try {
+        const docRef = doc(db, "certificates", certId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            resultDiv.innerHTML = `✅ Valid Certificate! <br> <strong>Name:</strong> ${docSnap.data().name}`;
+            resultDiv.className = "valid"; // Apply CSS class
+        } else {
+            resultDiv.innerHTML = "❌ Invalid Certificate!";
+            resultDiv.className = "invalid"; // Apply CSS class
+        }
+    } catch (error) {
+        console.error("Error verifying certificate:", error);
+        resultDiv.innerHTML = "⚠️ Error connecting to database.";
+        resultDiv.className = "error"; // Apply CSS class
+    }
 });
