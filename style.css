@@ -75,3 +75,15 @@ button:hover {
 .invalid {
     color: #dc3545;
 }
+
+/* Success Message */
+.success {
+    color: green;
+    font-weight: bold;
+}
+
+/* Error Message */
+.error {
+    color: red;
+    font-weight: bold;
+}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Admin Panel</h2>
+    <form id="add-candidate-form">
+        <label for="name">Candidate Name:</label>
+        <input type="text" id="name" placeholder="Enter candidate name" required>
+        <label for="email">Candidate Email:</label>
+        <input type="email" id="email" placeholder="Enter candidate email" required>
+        <button type="submit">Add Candidate</button>
+    </form>
+    <div id="add-result"></div>
+    <script type="module" src="admin-panel.js"></script>
+</body>
+</html>
