@@ -41,6 +41,7 @@ document.getElementById("add-candidate-form").addEventListener("submit", async (
     // This ensures the date is human-readable and follows the desired format.
     const issuedDate = new Date(); // Get the current date and time.
     const formattedDate = `${String(issuedDate.getDate()).padStart(2, '0')}-${String(issuedDate.getMonth() + 1).padStart(2, '0')}-${issuedDate.getFullYear()}`;
+    const certificateId = `${Date.now()}`;
 
     try {
         // Generate a new document reference in the "Certificates" collection.
@@ -60,14 +61,25 @@ document.getElementById("add-candidate-form").addEventListener("submit", async (
             issued_date: formattedDate // Formatted issued date (string).
         });
 
-        // Log the auto-generated document ID to the console for debugging purposes.
-        console.log("Candidate added with ID:", docRef.id);
+        // Send a request to the server to generate the certificate
+        const response = await fetch("/generate-certificate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, certificateId, issuedDate: formattedDate })
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to generate certificate");
+        }
+
+        const data = await response.json();
+        console.log(data.message);
 
         // Display a success message to the user, including the generated certificate ID.
         resultDiv.textContent = `✅ Candidate added successfully! Certificate ID: ${docRef.id}`;
     } catch (error) {
-        // If an error occurs during the Firestore operation, log it to the console.
-        console.error("Error adding candidate:", error);
+        // If an error occurs during the operation, log it to the console.
+        console.error("Error:", error);
 
         // Display an error message to the user indicating the operation failed.
         resultDiv.textContent = "❌ Failed to add candidate. Please try again.";
