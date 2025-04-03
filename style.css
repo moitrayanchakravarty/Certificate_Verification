@@ -87,3 +87,26 @@ button:hover {
     color: red;
     font-weight: bold;
 }
+
+/* Main Buttons Section */
+.main-buttons {
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.main-buttons button {
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    transition: background 0.3s;
+}
+
+.main-buttons button:hover {
+    background-color: #0056b3;
+}
