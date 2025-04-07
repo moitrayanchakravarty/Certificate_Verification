@@ -37,15 +37,12 @@ document.getElementById("add-candidate-form").addEventListener("submit", async (
     // Get the result display element where success or error messages will be shown.
     const resultDiv = document.getElementById("add-result");
 
-    // Format the current date as "DD-MM-YYYY" to store it as the issued date.
-    // This ensures the date is human-readable and follows the desired format.
-    const issuedDate = new Date(); // Get the current date and time.
+    const issuedDate = new Date();
     const formattedDate = `${String(issuedDate.getDate()).padStart(2, '0')}-${String(issuedDate.getMonth() + 1).padStart(2, '0')}-${issuedDate.getFullYear()}`;
     const certificateId = `${Date.now()}`;
+    const certificateLink = `https://codeclashjec.netlify.app/certificates/${certificateId}`; // Generate the Netlify link
 
     try {
-        // Generate a new document reference in the "Certificates" collection.
-        // The `doc()` function creates a reference with an auto-generated unique ID.
         const docRef = doc(collection(db, "Certificates"));
 
         // Use the `setDoc()` function to create a new document in Firestore.
@@ -55,10 +52,11 @@ document.getElementById("add-candidate-form").addEventListener("submit", async (
         // - email: The candidate's email entered in the form.
         // - issued_date: The formatted date when the certificate was issued (stored as a string).
         await setDoc(docRef, {
-            certificate_id: docRef.id, // Auto-generated document ID (string).
-            name: name,               // Candidate's name (string).
-            email: email,             // Candidate's email (string).
-            issued_date: formattedDate // Formatted issued date (string).
+            certificate_id: docRef.id,
+            name: name,
+            email: email,
+            issued_date: formattedDate,
+            certificate_link: certificateLink // Add the Netlify link
         });
 
         // Send a request to the server to generate the certificate
@@ -79,6 +77,8 @@ document.getElementById("add-candidate-form").addEventListener("submit", async (
         resultDiv.textContent = `✅ Candidate added successfully! Certificate ID: ${docRef.id}`;
     } catch (error) {
         // If an error occurs during the operation, log it to the console.
+
+        // Display an error message to the user indicating the operation failed.
         console.error("Error:", error);
 
         // Display an error message to the user indicating the operation failed.

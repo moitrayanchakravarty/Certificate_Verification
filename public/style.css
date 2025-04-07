@@ -110,3 +110,14 @@ button:hover {
 .main-buttons button:hover {
     background-color: #0056b3;
 }
+
+/* Certificate Link */
+.certificate-link {
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.certificate-link:hover {
+    color: #0056b3;
+}

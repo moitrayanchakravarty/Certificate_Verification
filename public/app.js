@@ -28,14 +28,14 @@ async function testFirestoreConnection() {
 
 // Function to verify certificate
 document.getElementById("verification-form").addEventListener("submit", async (event) => {
-    event.preventDefault(); // Prevent form refresh
+    event.preventDefault();
 
     const certId = document.getElementById("certificate_id").value.trim();
     const resultDiv = document.getElementById("result");
 
     if (certId === "") {
         resultDiv.innerHTML = "❌ Please enter a Certificate ID.";
-        resultDiv.className = "invalid"; // Apply CSS class
+        resultDiv.className = "invalid";
         return;
     }
 
@@ -44,15 +44,23 @@ document.getElementById("verification-form").addEventListener("submit", async (e
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-            resultDiv.innerHTML = `✅ Valid Certificate! <br> <strong>Name:</strong> ${docSnap.data().name}`;
-            resultDiv.className = "valid"; // Apply CSS class
+            const data = docSnap.data();
+            const name = data.name;
+            const certificateLink = data.certificate_link;
+
+            resultDiv.innerHTML = `
+                ✅ Valid Certificate! <br>
+                <strong>Name:</strong> ${name} <br>
+                <a href="${certificateLink}" target="_blank" class="certificate-link">View Certificate</a>
+            `;
+            resultDiv.className = "valid";
         } else {
             resultDiv.innerHTML = "❌ Invalid Certificate!";
-            resultDiv.className = "invalid"; // Apply CSS class
+            resultDiv.className = "invalid";
         }
     } catch (error) {
         console.error("Error verifying certificate:", error);
         resultDiv.innerHTML = "⚠️ Error connecting to database.";
-        resultDiv.className = "error"; // Apply CSS class
+        resultDiv.className = "error";
     }
 });
