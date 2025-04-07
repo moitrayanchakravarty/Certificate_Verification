@@ -37,11 +37,20 @@ def generate_certificate(name, certificate_id, issued_date, template_path, outpu
                     if paragraph.runs:
                         paragraph.runs[0].text = full_text  # Set the updated text in the first run
 
-            if "{{qr_code}}" in getattr(shape, "text", ""):
-                left = Inches(4)
-                top = Inches(3)
-                slide.shapes.add_picture(qr_code_path, left, top, width=Inches(2), height=Inches(2))
-                shape.text = ""
+            # Replace the QR code placeholder with the QR code image
+            if shape.has_text_frame and "{{qr_code}}" in shape.text_frame.text:
+                # Get the position and size of the textbox
+                left = shape.left
+                top = shape.top
+                width = shape.width
+                height = shape.height
+
+                # Delete the placeholder textbox
+                sp = shape._element
+                sp.getparent().remove(sp)
+
+                # Add the QR code image in the same position and size
+                slide.shapes.add_picture(qr_code_path, left, top, width=width, height=height)
 
     prs.save(output_path)
     os.remove(qr_code_path)
