@@ -22,13 +22,20 @@ def generate_certificate(name, certificate_id, issued_date, template_path, outpu
     for slide in prs.slides:
         for shape in slide.shapes:
             if shape.has_text_frame:
-                text = shape.text_frame.text
-                if "{{name}}" in text:
-                    shape.text_frame.text = text.replace("{{name}}", name)
-                if "{{certificate_id}}" in text:
-                    shape.text_frame.text = text.replace("{{certificate_id}}", certificate_id)
-                if "{{issued_date}}" in text:
-                    shape.text_frame.text = text.replace("{{issued_date}}", issued_date)
+                for paragraph in shape.text_frame.paragraphs:
+                    # Combine all runs into a single string
+                    full_text = "".join(run.text for run in paragraph.runs)
+
+                    # Replace placeholders in the combined text
+                    full_text = full_text.replace("{{name}}", name)
+                    full_text = full_text.replace("{{certificate_id}}", certificate_id)
+                    full_text = full_text.replace("{{issued_date}}", issued_date)
+
+                    # Clear all runs and reapply the updated text with formatting
+                    for run in paragraph.runs:
+                        run.text = ""  # Clear existing text
+                    if paragraph.runs:
+                        paragraph.runs[0].text = full_text  # Set the updated text in the first run
 
             if "{{qr_code}}" in getattr(shape, "text", ""):
                 left = Inches(4)
@@ -41,7 +48,7 @@ def generate_certificate(name, certificate_id, issued_date, template_path, outpu
 
 if __name__ == "__main__":
     name = sys.argv[1]
-    certificate_id = sys.argv[2]
+    certificate_id = sys.argv[2]  # Firebase-generated certificate ID
     issued_date = sys.argv[3]
     template_path = "template.pptx"
     output_path = f"certificates/certificate_{certificate_id}.pptx"

@@ -28,15 +28,12 @@ app.get("/", (req, res) => {
 app.post("/generate-certificate", (req, res) => {
     const { name, certificateId, issuedDate } = req.body;
 
-    // Validate request body
     if (!name || !certificateId || !issuedDate) {
         return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Command to execute the Python script
-    const command = `python3 generate_certificate.py "${name}" "${certificateId}" "${issuedDate}"`;
+    const command = `python generate_certificate.py "${name}" "${certificateId}" "${issuedDate}"`;
 
-    // Execute the Python script
     exec(command, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing Python script: ${error.message}`);

@@ -39,27 +39,23 @@ document.getElementById("add-candidate-form").addEventListener("submit", async (
 
     const issuedDate = new Date();
     const formattedDate = `${String(issuedDate.getDate()).padStart(2, '0')}-${String(issuedDate.getMonth() + 1).padStart(2, '0')}-${issuedDate.getFullYear()}`;
-    const certificateId = `${Date.now()}`;
-    const certificateLink = `https://codeclashjec.netlify.app/certificates/${certificateId}`; // Generate the Netlify link
 
     try {
-        const docRef = doc(collection(db, "Certificates"));
+        const docRef = doc(collection(db, "Certificates")); // Create a new document reference
+        const certificateId = docRef.id; // Use Firebase-generated document ID
 
-        // Use the `setDoc()` function to create a new document in Firestore.
-        // The document will include the following fields:
-        // - certificate_id: The auto-generated document ID (stored as a string).
-        // - name: The candidate's name entered in the form.
-        // - email: The candidate's email entered in the form.
-        // - issued_date: The formatted date when the certificate was issued (stored as a string).
+        const certificateLink = `https://codeclashjec.netlify.app/certificates/${certificateId}`;
+
+        // Store the certificate data in Firestore
         await setDoc(docRef, {
-            certificate_id: docRef.id,
+            certificate_id: certificateId,
             name: name,
             email: email,
             issued_date: formattedDate,
-            certificate_link: certificateLink // Add the Netlify link
+            certificate_link: certificateLink
         });
 
-        // Send a request to the server to generate the certificate
+        // Send the certificate ID and other details to the server
         const response = await fetch("/generate-certificate", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -73,8 +69,7 @@ document.getElementById("add-candidate-form").addEventListener("submit", async (
         const data = await response.json();
         console.log(data.message);
 
-        // Display a success message to the user, including the generated certificate ID.
-        resultDiv.textContent = `✅ Candidate added successfully! Certificate ID: ${docRef.id}`;
+        resultDiv.textContent = `✅ Candidate added successfully! Certificate ID: ${certificateId}`;
     } catch (error) {
         // If an error occurs during the operation, log it to the console.
 
