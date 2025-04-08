@@ -109,7 +109,7 @@ if __name__ == "__main__":
     certificate_id = sys.argv[2]  # Firebase-generated certificate ID
     issued_date = sys.argv[3]
     template_path = "template.pptx"
-    output_path = f"certificates/certificate_{certificate_id}.pptx"
+    output_path = f"public/certificates/certificate_{certificate_id}.pptx"
     pdf_output_path = output_path.replace(".pptx", ".pdf")
 
     os.makedirs("certificates", exist_ok=True)
