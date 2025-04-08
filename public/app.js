@@ -51,7 +51,7 @@ document.getElementById("verification-form").addEventListener("submit", async (e
             resultDiv.innerHTML = `
                 ✅ Valid Certificate! <br>
                 <strong>Name:</strong> ${name} <br>
-                <a href="${certificateLink}" target="_blank" class="certificate-link">View Certificate</a>
+                <a href="${certificateLink}" target="_blank" class="certificate-link">View Certificate (PDF)</a>
             `;
             resultDiv.className = "valid";
         } else {

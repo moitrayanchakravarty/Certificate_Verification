@@ -14,6 +14,9 @@ app.use(express.json());
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, "public")));
 
+// Serve static files from the "certificates" directory
+app.use("/certificates", express.static(path.join(__dirname, "certificates")));
+
 // Serve favicon.ico from the root directory
 app.get("/favicon.ico", (req, res) => {
     res.sendFile(path.join(__dirname, "favicon.ico"));
@@ -37,15 +40,17 @@ app.post("/generate-certificate", (req, res) => {
     exec(command, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing Python script: ${error.message}`);
+            console.error(`Full error: ${error.stack}`); // Log full error stack
             return res.status(500).json({ error: "Failed to generate certificate" });
         }
         if (stderr) {
-            console.error(`Python script error: ${stderr}`);
+            console.error(`Python script stderr: ${stderr}`); // Log Python script errors
             return res.status(500).json({ error: "Error in certificate generation" });
         }
 
         console.log(`Python script output: ${stdout}`);
-        res.json({ message: "Certificate generated successfully" });
+        const pdfPath = stdout.trim().split("Certificate generated: ")[1];
+        res.json({ message: "Certificate generated successfully", pdfPath });
     });
 });
 

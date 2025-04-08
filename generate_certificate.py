@@ -3,9 +3,12 @@ from pptx import Presentation
 from pptx.util import Inches
 import os
 import sys
+from comtypes.client import CreateObject  # For PDF conversion
+import time
 
 def generate_certificate(name, certificate_id, issued_date, template_path, output_path):
-    netlify_link = f"https://codeclashjec.netlify.app/certificates/{certificate_id}"
+    # Include .pdf extension in the QR code link
+    netlify_link = f"https://codeclashjec.netlify.app/certificates/{certificate_id}.pdf"
     qr_code_path = f"{certificate_id}_qr.png"
 
     # Generate QR Code
@@ -14,6 +17,7 @@ def generate_certificate(name, certificate_id, issued_date, template_path, outpu
     qr.make(fit=True)
     qr_img = qr.make_image(fill="black", back_color="white")
     qr_img.save(qr_code_path)
+    print(f"QR Code generated with link: {netlify_link}")  # Debug log
 
     # Load PowerPoint template
     prs = Presentation(template_path)
@@ -53,7 +57,52 @@ def generate_certificate(name, certificate_id, issued_date, template_path, outpu
                 slide.shapes.add_picture(qr_code_path, left, top, width=width, height=height)
 
     prs.save(output_path)
+    print(f"PPTX saved successfully at: {output_path}")  # Debug log
+
+    # Add a short delay to ensure the file is fully written
+    time.sleep(1)
+
+    # Check if the file exists before attempting conversion
+    if not os.path.exists(output_path):
+        raise FileNotFoundError(f"The PPTX file was not created: {output_path}")
+
     os.remove(qr_code_path)
+
+    # Convert PPTX to PDF
+    pdf_output_path = output_path.replace(".pptx", ".pdf")
+    print(f"Converting PPTX to PDF: {pdf_output_path}")  # Debug log
+    convert_pptx_to_pdf(output_path, pdf_output_path)
+
+    # Delete the PPTX file after successful PDF conversion
+    if os.path.exists(output_path):
+        os.remove(output_path)
+        print(f"PPTX file deleted: {output_path}")  # Debug log
+
+    return pdf_output_path
+
+def convert_pptx_to_pdf(pptx_path, pdf_path):
+    try:
+        # Convert paths to absolute paths
+        pptx_path = os.path.abspath(pptx_path)
+        pdf_path = os.path.abspath(pdf_path)
+
+        print(f"Absolute PPTX path: {pptx_path}")  # Debug log
+        print(f"Absolute PDF path: {pdf_path}")  # Debug log
+
+        # Initialize PowerPoint application
+        powerpoint = CreateObject("PowerPoint.Application")
+        powerpoint.Visible = 1
+
+        # Open the presentation
+        presentation = powerpoint.Presentations.Open(pptx_path)
+        presentation.SaveAs(pdf_path, 32)  # 32 is the format for PDF
+        presentation.Close()
+        powerpoint.Quit()
+
+        print(f"PDF successfully created at: {pdf_path}")  # Debug log
+    except Exception as e:
+        print(f"Error during PDF conversion: {e}")  # Debug log
+        raise
 
 if __name__ == "__main__":
     name = sys.argv[1]
@@ -63,5 +112,5 @@ if __name__ == "__main__":
     output_path = f"certificates/certificate_{certificate_id}.pptx"
 
     os.makedirs("certificates", exist_ok=True)
-    generate_certificate(name, certificate_id, issued_date, template_path, output_path)
-    print(f"Certificate generated: {output_path}")
+    pdf_path = generate_certificate(name, certificate_id, issued_date, template_path, output_path)
+    print(f"Certificate generated: {pdf_path}")

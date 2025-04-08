@@ -44,7 +44,7 @@ document.getElementById("add-candidate-form").addEventListener("submit", async (
         const docRef = doc(collection(db, "Certificates")); // Create a new document reference
         const certificateId = docRef.id; // Use Firebase-generated document ID
 
-        const certificateLink = `https://codeclashjec.netlify.app/certificates/${certificateId}`;
+        const certificateLink = `https://codeclashjec.netlify.app/certificates/${certificateId}.pdf`;
 
         // Store the certificate data in Firestore
         await setDoc(docRef, {
@@ -63,6 +63,8 @@ document.getElementById("add-candidate-form").addEventListener("submit", async (
         });
 
         if (!response.ok) {
+            const errorText = await response.text(); // Get full error response
+            console.error("Error:", errorText); // Log the error response
             throw new Error("Failed to generate certificate");
         }
 
