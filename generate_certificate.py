@@ -7,8 +7,8 @@ from comtypes.client import CreateObject  # For PDF conversion
 import time
 
 def generate_certificate(name, certificate_id, issued_date, template_path, output_path):
-    # Include .pdf extension in the QR code link
-    netlify_link = f"https://codeclashjec.netlify.app/certificates/{certificate_id}.pdf"
+    # Update the QR code link format
+    netlify_link = f"https://codeclashjec.netlify.app/certificates/certificate_{certificate_id}.pdf"
     qr_code_path = f"{certificate_id}_qr.png"
 
     # Generate QR Code
@@ -110,6 +110,7 @@ if __name__ == "__main__":
     issued_date = sys.argv[3]
     template_path = "template.pptx"
     output_path = f"certificates/certificate_{certificate_id}.pptx"
+    pdf_output_path = output_path.replace(".pptx", ".pdf")
 
     os.makedirs("certificates", exist_ok=True)
     pdf_path = generate_certificate(name, certificate_id, issued_date, template_path, output_path)

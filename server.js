@@ -37,6 +37,7 @@ app.post("/generate-certificate", (req, res) => {
 
     const command = `python generate_certificate.py "${name}" "${certificateId}" "${issuedDate}"`;
 
+    // After execution, ensure the response includes the correct file name
     exec(command, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error executing Python script: ${error.message}`);
