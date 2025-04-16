@@ -1,5 +1,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
+
 import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
+
+
+
+
+
 
 // Firebase configuration object containing the keys and identifiers for your Firebase project.
 // These values are specific to your Firebase project and are used to initialize the Firebase app.
@@ -18,7 +25,17 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore, the Firebase database service, for the app.
 // Firestore will be used to store and retrieve data for the "Certificates" collection.
+const auth = getAuth();
 const db = getFirestore(app);
+
+// Check if the user is authenticated
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        // If no user is authenticated, redirect to the login page
+        window.location.href = "admin-login.html";
+    }
+});
+
 
 // Add an event listener to the form with the ID "add-candidate-form".
 // This listener will trigger when the form is submitted.
