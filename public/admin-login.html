@@ -3,19 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>Administrator Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>Admin Login</h2>
+    
     <form id="admin-login-form">
-        <label for="email">Email:</label>
+        <h2>Administrator Login</h2>
+        <label for="email"><strong>Email:</strong></label>
         <input type="email" id="email" placeholder="Enter your email" required>
-        <label for="password">Password:</label>
+        <label for="password"><strong>Password:</strong></label>
         <input type="password" id="password" placeholder="Enter your password" required>
         <button type="submit">Login</button>
     </form>
     <div id="login-error"></div>
     <script type="module" src="admin-login.js"></script>
+
+    <footer>
+        <p>Created by <a href="https://www.linkedin.com/in/moitrayan/" target="_blank">Moitrayan Chakravarty</a></p>
+    </footer>
+    
 </body>
 </html>

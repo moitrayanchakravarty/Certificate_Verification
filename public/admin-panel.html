@@ -3,19 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>Administrator Panel</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>Admin Panel</h2>
+    
     <form id="add-candidate-form">
-        <label for="name">Candidate Name:</label>
+        <h2>Administrator Panel</h2>
+        <label for="name"><strong>Candidate Name:</strong></label>
         <input type="text" id="name" placeholder="Enter candidate name" required>
-        <label for="email">Candidate Email:</label>
+        <label for="email"><strong>Candidate Email:</strong></label>
         <input type="email" id="email" placeholder="Enter candidate email" required>
         <button type="submit">Add Candidate</button>
     </form>
     <div id="add-result"></div>
     <script type="module" src="admin-panel.js"></script>
+
+    <footer>
+        <p>Created by <a href="https://www.linkedin.com/in/moitrayan/" target="_blank">Moitrayan Chakravarty</a></p>
+    </footer>
+    
 </body>
 </html>

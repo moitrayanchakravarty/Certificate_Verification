@@ -25,6 +25,6 @@ document.getElementById("admin-login-form").addEventListener("submit", async (ev
         window.location.href = "admin-panel.html"; // Redirect to admin panel
     } catch (error) {
         console.error("Login failed:", error.message);
-        errorDiv.textContent = "❌ Login failed. Please check your credentials.";
+        errorDiv.textContent = "Login Attempt Unsuccessful. Please review your credentials.";
     }
 });

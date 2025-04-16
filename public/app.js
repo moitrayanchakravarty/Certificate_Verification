@@ -34,7 +34,7 @@ document.getElementById("verification-form").addEventListener("submit", async (e
     const resultDiv = document.getElementById("result");
 
     if (certId === "") {
-        resultDiv.innerHTML = "❌ Please enter a Certificate ID.";
+        resultDiv.innerHTML = "Please enter a valid Certificate number.";
         resultDiv.className = "invalid";
         return;
     }
@@ -49,13 +49,13 @@ document.getElementById("verification-form").addEventListener("submit", async (e
             const certificateLink = data.certificate_link;
 
             resultDiv.innerHTML = `
-                ✅ Valid Certificate! <br>
+                Credential Successfully Authenticated! <br>
                 <strong>Name:</strong> ${name} <br>
-                <a href="${certificateLink}" target="_blank" class="certificate-link">View Certificate (PDF)</a>
+                <a href="${certificateLink}" target="_blank" class="certificate-link">View Credential</a>
             `;
             resultDiv.className = "valid";
         } else {
-            resultDiv.innerHTML = "❌ Invalid Certificate!";
+            resultDiv.innerHTML = "Credential Authentication Failed. Please Try Again.";
             resultDiv.className = "invalid";
         }
     } catch (error) {
